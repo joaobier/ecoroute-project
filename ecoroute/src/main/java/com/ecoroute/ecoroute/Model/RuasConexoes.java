@@ -1,15 +1,14 @@
 package com.ecoroute.ecoroute.Model;
-
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "ruas_conexoes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Usuario {
+public class RuasConexoes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,18 +16,12 @@ public class Usuario {
     private int id;
 
     @Column(nullable = false)
-    private String nome;
-
-    @Column(unique = true, nullable = false)
-    private String login;
+    private Bairro bairroOrigem;
 
     @Column(nullable = false)
-    private String senha;
+    private Bairro bairroDestino;
 
-    public Usuario(String nome, String login, String senha){
-        this.nome = nome;
-        this.login = login;
-        this.senha = senha;
-    }
+    @Column(nullable = false)
+    private long distancia;
 
 }

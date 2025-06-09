@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "bairros")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Usuario {
+public class Bairro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,17 +18,5 @@ public class Usuario {
 
     @Column(nullable = false)
     private String nome;
-
-    @Column(unique = true, nullable = false)
-    private String login;
-
-    @Column(nullable = false)
-    private String senha;
-
-    public Usuario(String nome, String login, String senha){
-        this.nome = nome;
-        this.login = login;
-        this.senha = senha;
-    }
 
 }
