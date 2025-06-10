@@ -22,24 +22,14 @@ public class Caminhao {
     @Column(nullable = false)
     private String placa;
 
-    @Column(nullable = true)
-    private String nome_motorista;
+    @OneToOne
+    @JoinColumn(name = "usuario_id",unique = true)
+    private Usuario usuario;
 
     @Column(nullable = true)
     private int capacidade_maxima;
 
     @Column(nullable = true)
     private String tipo_residuo;
-
-    public Caminhao(String placa, String nome_motorista, int capacidade_maxima, String tipo_residuo){
-        this.placa = placa;
-        this.nome_motorista = nome_motorista;
-        this.capacidade_maxima = capacidade_maxima;
-        this.tipo_residuo = tipo_residuo;
-    }
-
-    public Caminhao(String placa){
-        this.placa = placa;
-    }
 
 }

@@ -1,7 +1,10 @@
 package com.ecoroute.ecoroute.Model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "itinerarios")
@@ -16,7 +19,8 @@ public class Itinerario {
     @EqualsAndHashCode.Include
     private int id;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "rota_id", nullable = false)
     private Rota rota;
 
     @Column(nullable = false)

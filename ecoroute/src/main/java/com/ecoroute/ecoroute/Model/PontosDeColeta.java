@@ -1,6 +1,10 @@
 package com.ecoroute.ecoroute.Model;
+
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "pontos_coleta")
@@ -15,22 +19,16 @@ public class PontosDeColeta {
     @EqualsAndHashCode.Include
     private int id;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "bairro_id", nullable = false)
     private Bairro bairro;
 
     @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false)
-    private Usuario responsavel;
-
-    //ISSO DEVERIA ESTAR NO USUARIO -> CONVERSAR COM O GUSTAVO
-    @Column(nullable = false)
-    private String telefone_responsavel;
-
-    //ISSO DEVERIA ESTAR NO USUARIO -> CONVERSAR COM O GUSTAVO
-    @Column(nullable = false)
-    private String email_responsavel;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     @Column(nullable = false)
     private String endereco;
@@ -41,6 +39,4 @@ public class PontosDeColeta {
     //ISSO PRECISA SER REFORMULADO, CONVERSAR COM O GUSTAVO
     @Column(nullable = false)
     private String residuosAceitaveis;
-
-
 }

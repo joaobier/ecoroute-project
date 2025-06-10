@@ -1,15 +1,16 @@
 package com.ecoroute.ecoroute.Model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "auditoria")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Auditoria {
 
@@ -22,7 +23,8 @@ public class Auditoria {
     @Column(nullable = false)
     private String dataOcorrencia;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
     @Column(nullable = false)
@@ -34,21 +36,5 @@ public class Auditoria {
     @Column(nullable = false)
     private String descricaoOcorrencia;
 
-    public Auditoria(int id, Usuario usuario, String operacao, String tabela, String descricaoOcorrencia) {
-        this.id = id;
-        this.usuario = usuario;
-        this.operacao = operacao;
-        this.tabela = tabela;
-        this.descricaoOcorrencia = descricaoOcorrencia;
-        Date momentoExecucao = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        this.dataOcorrencia = formatter.format(momentoExecucao);
-    }
-
-    public Auditoria(){
-        Date momentoExecucao = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        this.dataOcorrencia = formatter.format(momentoExecucao);
-    }
 
 }

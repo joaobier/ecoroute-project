@@ -26,8 +26,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/login/{login}")
-    public ResponseEntity<Usuario> buscarPorLogin(@PathVariable String login) {
-        Optional<Usuario> usuario = usuarioService.buscarPorLogin(login);
+    public ResponseEntity<Usuario> buscarPorLogin(@PathVariable String email) {
+        Optional<Usuario> usuario = usuarioService.buscarPorEmail(email);
 
         return usuario
                 .map(ResponseEntity::ok) //tudo certo entrega o dado

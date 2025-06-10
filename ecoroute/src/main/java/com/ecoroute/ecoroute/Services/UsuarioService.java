@@ -26,8 +26,8 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Optional<Usuario> buscarPorLogin(String login) {
-        return usuarioRepository.findByLogin(login);
+    public Optional<Usuario> buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
     public void deletar(int id) {

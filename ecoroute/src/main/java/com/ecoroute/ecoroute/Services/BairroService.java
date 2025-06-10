@@ -1,6 +1,5 @@
 package com.ecoroute.ecoroute.Services;
 
-import com.ecoroute.ecoroute.Model.Auditoria;
 import com.ecoroute.ecoroute.Model.Bairro;
 import com.ecoroute.ecoroute.Repositories.BairroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
