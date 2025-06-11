@@ -34,9 +34,21 @@ public class BairroController {
                 .orElseGet(()-> ResponseEntity.notFound().build()); //não achou nada
     }
 
+    @GetMapping("/{nome}")
+    public ResponseEntity<Bairro> buscarPorNome(@PathVariable String nome) {
+        Optional<Bairro> bairro = bairroService.buscarPorNome(nome);
+
+        return bairro
+                .map(ResponseEntity::ok) //tudo certo entrega o dado
+                .orElseGet(()-> ResponseEntity.notFound().build()); //não achou nada
+    }
+
     @PostMapping
     public Bairro criarBairro(@RequestBody Bairro bairro){
         return bairroService.salvar(bairro);
     }
+
+    @PutMapping
+    public Bairro editarBairro(@RequestBody Bairro bairro){return bairroService.editar(bairro);}
 
 }

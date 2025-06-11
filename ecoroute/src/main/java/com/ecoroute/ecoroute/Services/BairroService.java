@@ -26,9 +26,13 @@ public class BairroService {
         return bairroRepository.findById(id);
     }
 
+    public Optional<Bairro> buscarPorNome(String nome){return bairroRepository.findByNome(nome);}
+
     public Bairro salvar(Bairro bairro) {
         return bairroRepository.save(bairro);
     }
+
+    public Bairro editar(Bairro bairro){return bairroRepository.save(bairro);}
 
     public void deletar(int id) {
         bairroRepository.deleteById(id);
