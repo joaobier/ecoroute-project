@@ -40,6 +40,12 @@ public class RuasConexoes {
     private Bairro bairroDestino;
 
     @Column(nullable = false)
-    private long distancia;
+    private int distancia;
+
+    public RuasConexoes(Bairro bairroOrigem, Bairro bairroDestino, int distancia){
+        this.distancia = distancia;
+        this.bairroDestino = bairroDestino;
+        this.bairroOrigem = bairroOrigem;
+    }
 
 }
