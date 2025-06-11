@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Services;
 
+import com.ecoroute.ecoroute.Model.Bairro;
 import com.ecoroute.ecoroute.Model.RuasConexoes;
 import com.ecoroute.ecoroute.Repositories.RuasConexoesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,31 +56,28 @@ public class RuasConexoesService {
         return ruasConexoesRepository.findById(id);
     }
 
-    public RuasConexoes salvar(RuasConexoes ruasConexoes) {
+    public void salvar(RuasConexoes ruasConexoes) {
         //Está olhando se a ida e volta já existem
-        boolean jaExiste = ruasConexoesRepository.existsByBairroOrigemIdAndBairroDestinoId(
+        boolean Existe = ruasConexoesRepository.existsByBairroOrigemIdAndBairroDestinoId(
                 ruasConexoes.getBairroOrigem().getId(),
                 ruasConexoes.getBairroDestino().getId()
         );
 
         //Se não existir ele registra os 2
-        if (!jaExiste) {
+        if (!Existe) {
             // Cria a conexão de volta
             RuasConexoes ruaVolta = new RuasConexoes(
                     ruasConexoes.getBairroDestino(),
                     ruasConexoes.getBairroOrigem(),
                     ruasConexoes.getDistancia()
             );
-            ruasConexoesRepository.save(ruasConexoes);//SALVA A IDEA
-            return ruasConexoesRepository.save(ruaVolta);//SALVA A VOLTA
-
+            ruasConexoesRepository.save(ruasConexoes);//SALVA A IDA
+            ruasConexoesRepository.save(ruaVolta);//SALVA A VOLTA
+            atualizarGrafo(); //atualiza o grafo atual
         } else {
             throw new RuntimeException("Conexão já existente entre os bairros.");
         }
     }
-
-
-
 
     public void deletar(int id) {
         /*
@@ -103,7 +101,7 @@ public class RuasConexoesService {
 
            Ou seja, ele olha para o 6 -> 8 e deleta
            e procura o 8 -> 6 e deleta também
-           sendo SE BAIRRO (6 ^ 8) V (8 ^ 6) DELETE
+           sendo: SE BAIRRO (6 ^ 8) V (8 ^ 6) DELETE
            Dessa maneira eu garanto que a volta, o inverso será deletado.
         */
         Optional<RuasConexoes> conexao = ruasConexoesRepository.findById(id);
@@ -150,4 +148,13 @@ public class RuasConexoesService {
         });
     }
 
+    //AQUI COMEÇARA A APLICAÇÃO DE DJISKTRA PARA ACHAR O CAMINHO MENOR ENTRE DOIS PONTOS
+    public void MenorCaminho(Bairro origem, Bairro destino){
+
+        int idOrigem = origem.getId();
+        int idDestino = destino.getId();
+
+
+
+    }
 }

@@ -35,8 +35,8 @@ public class RuasConexoesController {
     }
 
     @PostMapping
-    public RuasConexoes criarRuasConexoes(@RequestBody RuasConexoes ruasConexoes){
-        return ruasConexoesService.salvar(ruasConexoes);
+    public void criarRuasConexoes(@RequestBody RuasConexoes ruasConexoes){
+        ruasConexoesService.salvar(ruasConexoes);
     }
 
     @GetMapping("/grafo")
