@@ -22,6 +22,7 @@ public class RuasConexoes {
     @EqualsAndHashCode.Include
     private int id;
 
+    /*
     @ManyToMany
     @JoinTable(
             name = "bairro_rua_conexao",
@@ -29,6 +30,14 @@ public class RuasConexoes {
             inverseJoinColumns = @JoinColumn(name = "bairro_id")
     )
     private Set<Bairro> bairros = new HashSet<>();
+    */
+    @ManyToOne
+    @JoinColumn(name = "bairro_origem_id", nullable = false)
+    private Bairro bairroOrigem;
+
+    @ManyToOne
+    @JoinColumn(name = "bairro_destino_id", nullable = false)
+    private Bairro bairroDestino;
 
     @Column(nullable = false)
     private long distancia;

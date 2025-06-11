@@ -39,4 +39,9 @@ public class RuasConexoesController {
         return ruasConexoesService.salvar(ruasConexoes);
     }
 
+    @GetMapping("/grafo")
+    public int[][] grafo(){
+        return ruasConexoesService.grafo();
+    }
+
 }
