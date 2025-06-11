@@ -30,6 +30,10 @@ public class PontosDeColetaService {
         return pontosDeColetaRepository.save(pontosDeColeta);
     }
 
+    public PontosDeColeta editar(PontosDeColeta pontosDeColeta) {
+        return pontosDeColetaRepository.save(pontosDeColeta);
+    }
+
     public void deletar(int id) {
         pontosDeColetaRepository.deleteById(id);
     }

@@ -4,10 +4,7 @@ import com.ecoroute.ecoroute.Model.Caminhao;
 import com.ecoroute.ecoroute.Services.CaminhaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,5 +35,14 @@ public class CaminhaoController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
+
+    @PostMapping
+    public Caminhao criarCaminhao(@RequestBody Caminhao caminhao){return caminhaoService.salvar(caminhao);}
+
+    @PutMapping
+    public Caminhao editarCaminhao(@RequestBody Caminhao caminhao){return caminhaoService.salvar(caminhao);}
+
+    @DeleteMapping("/{id}")
+    public void deletarCaminhao(@PathVariable int id){caminhaoService.deletar(id);}
 
 }

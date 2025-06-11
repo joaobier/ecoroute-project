@@ -51,4 +51,7 @@ public class BairroController {
     @PutMapping
     public Bairro editarBairro(@RequestBody Bairro bairro){return bairroService.editar(bairro);}
 
+    @DeleteMapping("/{id}")
+    public void deletarBairro(@PathVariable int id){bairroService.deletar(id);}
+
 }

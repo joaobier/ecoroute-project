@@ -39,4 +39,12 @@ public class RotaController {
         return rotaService.salvar(rota);
     }
 
+    @PutMapping
+    public Rota editarRota(@RequestBody Rota rota){
+        return rotaService.salvar(rota);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarRota(@PathVariable int id){rotaService.deletar(id);}
+
 }

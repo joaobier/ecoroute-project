@@ -30,6 +30,10 @@ public class AuditoriaService {
         return auditoriaRepository.save(auditoria);
     }
 
+    public Auditoria editar(Auditoria auditoria) {
+        return auditoriaRepository.save(auditoria);
+    }
+
     public void deletar(int id) {
         auditoriaRepository.deleteById(id);
     }

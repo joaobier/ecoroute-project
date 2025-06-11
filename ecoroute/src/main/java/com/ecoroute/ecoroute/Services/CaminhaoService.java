@@ -30,6 +30,8 @@ public class CaminhaoService {
         return caminhaoRepository.findByPlaca(placa);
     }
 
+    public Caminhao editar(Caminhao caminhao){ return caminhaoRepository.save(caminhao);}
+
     public void deletar(int id){
         caminhaoRepository.deleteById(id);
     }

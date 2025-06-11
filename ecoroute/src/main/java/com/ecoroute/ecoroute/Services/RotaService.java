@@ -30,6 +30,10 @@ public class RotaService {
         return rotaRepository.save(rota);
     }
 
+    public Rota editar(Rota rota) {
+        return rotaRepository.save(rota);
+    }
+
     public void deletar(int id) {
         rotaRepository.deleteById(id);
     }

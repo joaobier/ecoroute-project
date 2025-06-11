@@ -39,4 +39,12 @@ public class AuditoriaController {
         return auditoriaService.salvar(auditoria);
     }
 
+    @PutMapping
+    public Auditoria editarAuditoria(@RequestBody Auditoria auditoria){
+        return auditoriaService.editar(auditoria);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarAuditoria(@PathVariable int id){auditoriaService.deletar(id);}
+
 }

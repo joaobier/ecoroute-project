@@ -34,8 +34,6 @@ public class BairroService {
 
     public Bairro editar(Bairro bairro){return bairroRepository.save(bairro);}
 
-    public void deletar(int id) {
-        bairroRepository.deleteById(id);
-    }
+    public void deletar(int id) {bairroRepository.deleteById(id);}
 
 }

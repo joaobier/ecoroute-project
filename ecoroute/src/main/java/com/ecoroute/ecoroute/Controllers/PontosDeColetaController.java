@@ -39,4 +39,14 @@ public class PontosDeColetaController {
         return pontosDeColetaService.salvar(pontosDeColeta);
     }
 
+    @PutMapping
+    public PontosDeColeta editarPontosDeColeta(@RequestBody PontosDeColeta pontosDeColeta){
+        return pontosDeColetaService.editar(pontosDeColeta);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarPontosDeColeta(@PathVariable int id){
+        pontosDeColetaService.deletar(id);
+    }
+
 }

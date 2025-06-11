@@ -13,21 +13,21 @@ import java.util.Optional;
 @RequestMapping("/Itinerario")
 public class ItinerarioController {
 
-    private final ItinerarioService ItinerarioService;
+    private final ItinerarioService itinerarioService;
 
     @Autowired
     public ItinerarioController(ItinerarioService ItinerarioService){
-        this.ItinerarioService = ItinerarioService;
+        this.itinerarioService = ItinerarioService;
     }
 
     @GetMapping
     public List<Itinerario> listar(){
-        return ItinerarioService.listarTodos();
+        return itinerarioService.listarTodos();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Itinerario> buscarPorId(@PathVariable int id) {
-        Optional<Itinerario> Itinerario = ItinerarioService.buscarPorId(id);
+        Optional<Itinerario> Itinerario = itinerarioService.buscarPorId(id);
 
         return Itinerario
                 .map(ResponseEntity::ok) //tudo certo entrega o dado
@@ -36,7 +36,15 @@ public class ItinerarioController {
 
     @PostMapping
     public Itinerario criarItinerario(@RequestBody Itinerario Itinerario){
-        return ItinerarioService.salvar(Itinerario);
+        return itinerarioService.salvar(Itinerario);
     }
+
+    @PutMapping
+    public Itinerario editarItinerario(@RequestBody Itinerario Itinerario){
+        return itinerarioService.salvar(Itinerario);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarItinerario(@PathVariable int id){itinerarioService.deletar(id);}
 
 }
