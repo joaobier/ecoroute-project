@@ -7,10 +7,7 @@ import com.ecoroute.ecoroute.Repositories.RuasConexoesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RuasConexoesService {
@@ -216,5 +213,118 @@ public class RuasConexoesService {
             System.out.println(); // Pula para a próxima linha
         }
     }
+
     //AQUI COMEÇARA A APLICAÇÃO DE DJISKTRA PARA ACHAR O CAMINHO MENOR ENTRE DOIS PONTOS
+    public String djkstra(int[][] matriz, int origemId, int destinoId){
+
+        int n = matriz.length;
+        int INFINITO = Integer.MAX_VALUE;
+
+        int[] distancias = new int[n];
+        boolean[] visitado = new boolean[n];
+        int[] anteriores = new int[n];
+
+        // Inicializar
+        //TODAS AS DISTÂNCIAS SÃO INFINITAS
+        //NÃO TEM INTERIORES PQ NÃO ANDOU
+        //COMEÇO
+        for (int i = 0; i < n; i++) {
+            distancias[i] = INFINITO;
+            anteriores[i] = -1;
+        }
+
+        int indiceOrigem = -1; //VALOR IMPOSSÍVEL DE ACONTECER POIS NÃO EXISTE POSIÇÃO -1 EM UM VETOR
+        int indiceDestino = -1; //PQ? PQ SE ELE PASSAR NO VETOR, NÃO ENCONTRAR, O VALOR CONTINUA E EU SEI QUE OS NÓS NÃO EXISTEM
+
+        for (int i = 0; i < n; i++) {
+            if (matriz[i][0] == origemId) {
+                indiceOrigem = i;
+            }
+            if (matriz[i][0] == destinoId) {
+                indiceDestino = i;
+            }
+        }
+
+        //AQUI O MOTIVO DO -1, CHECA SE OS NÓS EXISTEM OU NÃO
+        if (indiceOrigem == -1 || indiceDestino == -1) {
+            return "Erro: Bairro de origem ou destino não encontrado na matriz.";
+        }
+
+        distancias[indiceOrigem] = 0;
+
+        //AQUI SIM COMEÇA A INTERAR O ALGORITMO
+        for(int count = 0; count < (n-1); count++){
+            //Escolher o nó não visitado com a menor distância
+            //VARIÁVEL PARA PEGAR A POSIÇÃO DO VERTICE MAIS BARATO PARA IR
+            int u = -1;
+            //MAIOR DISTÂNCIA IMPOSSÍVEL PQ QUALQUER COISA MENOR QUE ISSO ELE VAI SUBSTITUINDO
+            int menorDistancia = INFINITO;
+
+            for(int i = 0; i < n; i++){
+                //SE O NÓ NÃO FOI VISITADO e A DISTÂNCIA É MENOR (NO INICÍO É INFINITO, OU SEJA, BASICAMENTE QUALQEUR COISA PASSA NA PRIMEIRA INTERAÇÃO)
+                if (!visitado[i] && distancias[i] < menorDistancia) {
+                    //ELE CAPTURA A DISTANCIA QUE ESTÁ NAQUELA LINHA PARA SER A NOVA MENOR DISTÂNCIA E INTERAR COM BASE NELA
+                    menorDistancia = distancias[i];
+                    //A NOVA LINHA COM ESSA CARACTERÍSTICA É O i ENCONTRADO
+                    u = i;
+                    //VAI INTERANDO PASSANDO POR TODAS AS COLUNAS ATÉ ACHAR A COM MENOR DISTÂNCIA
+                }
+            }
+
+            if (u == -1) break; //PASSOU EM TODAS AS LINHAS E NENHUM NÓ É MENOR QUE INFINITO, SIGNIFICA QUE O NÓ QUE COMEÇAMOS É ISOLADO, GG
+
+            visitado[u] = true;
+
+            // Atualizar as distâncias dos vizinhos de u
+            for (int v = 1; v < matriz[u].length; v++) {
+                int distanciaParaVizinho = matriz[u][v];
+                int idVizinho = v; // como a coluna 1 representa o bairro de ID 1, etc.
+
+                // Encontrar o índice da linha que tem o bairro de ID v
+                int indiceVizinho = -1;
+                for (int i = 0; i < n; i++) {
+                    if (matriz[i][0] == idVizinho) {
+                        indiceVizinho = i;
+                        break;
+                    }
+                }
+
+                if (indiceVizinho != -1 &&
+                        !visitado[indiceVizinho] &&
+                        distanciaParaVizinho != INFINITO &&
+                        distancias[u] + distanciaParaVizinho < distancias[indiceVizinho]) {
+
+                    distancias[indiceVizinho] = distancias[u] + distanciaParaVizinho;
+                    anteriores[indiceVizinho] = u;
+                }
+            }
+        }
+
+        // Reconstruir o caminho
+        List<Integer> caminho = new ArrayList<>();
+        int atual = indiceDestino;
+        while (atual != -1) {
+            caminho.add(0, matriz[atual][0]); // Adiciona o ID do bairro no início da lista
+            atual = anteriores[atual];
+        }
+
+        if (distancias[indiceDestino] == INFINITO) {
+            return "Não há caminho entre os bairros selecionados.";
+        }
+
+        // Construir string de saída
+        StringBuilder resultado = new StringBuilder();
+        resultado.append("Menor caminho de ").append(origemId)
+                .append(" para ").append(destinoId).append(": ");
+        for (int i = 0; i < caminho.size(); i++) {
+            resultado.append(caminho.get(i));
+            if (i != caminho.size() - 1) {
+                resultado.append(" -> ");
+            }
+        }
+        resultado.append("\nDistância total: ").append(distancias[indiceDestino]).append(" metros");
+
+        return resultado.toString();
+
+    }
 }
