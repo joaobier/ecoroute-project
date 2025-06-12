@@ -1,6 +1,7 @@
 package com.ecoroute.ecoroute.Controllers;
 
 import com.ecoroute.ecoroute.Model.RuasConexoes;
+import com.ecoroute.ecoroute.Services.BairroService;
 import com.ecoroute.ecoroute.Services.RuasConexoesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import java.util.Optional;
 public class RuasConexoesController {
 
     private final RuasConexoesService ruasConexoesService;
-
     @Autowired
     public RuasConexoesController(RuasConexoesService ruasConexoesService){
         this.ruasConexoesService = ruasConexoesService;
@@ -43,5 +43,6 @@ public class RuasConexoesController {
     public int[][] grafo(){
         return ruasConexoesService.grafo();
     }
+
 
 }

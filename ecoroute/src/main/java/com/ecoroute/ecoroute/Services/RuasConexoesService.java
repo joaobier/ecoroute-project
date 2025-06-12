@@ -2,6 +2,7 @@ package com.ecoroute.ecoroute.Services;
 
 import com.ecoroute.ecoroute.Model.Bairro;
 import com.ecoroute.ecoroute.Model.RuasConexoes;
+import com.ecoroute.ecoroute.Repositories.BairroRepository;
 import com.ecoroute.ecoroute.Repositories.RuasConexoesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,16 @@ import java.util.Optional;
 public class RuasConexoesService {
 
     private final RuasConexoesRepository ruasConexoesRepository;
+    private final BairroService bairroService;
     private int[][] grafo;
+    private int[][] matrizAdjacencia;
 
     @Autowired
-    public RuasConexoesService(RuasConexoesRepository ruasConexoesRepository) {
+    public RuasConexoesService(RuasConexoesRepository ruasConexoesRepository, BairroService bairroService) {
         this.ruasConexoesRepository = ruasConexoesRepository;
+        this.bairroService = bairroService;
         carregarGrafo();
+        carregarMatrizAdjacente();
     }
 
     public int[][] grafo(){
@@ -36,11 +41,11 @@ public class RuasConexoesService {
             this.grafo[i][2] = rc.getDistancia(); // metros
         }
 
-        // Log (opcional)
-        System.out.println("Grafo carregado na memória:");
-        for (int[] aresta : this.grafo) {
-            System.out.println(aresta[0] + " " + aresta[1] + " " + aresta[2]);
-        }
+        System.out.println("MATRIZ DE INCIDENCIA");
+        System.out.println("========================================================================================");
+        imprimirMatriz(this.grafo);
+        System.out.println("========================================================================================");
+
     }
 
     //só para atualizar se precisar
@@ -148,13 +153,50 @@ public class RuasConexoesService {
         });
     }
 
-    //AQUI COMEÇARA A APLICAÇÃO DE DJISKTRA PARA ACHAR O CAMINHO MENOR ENTRE DOIS PONTOS
-    public void MenorCaminho(Bairro origem, Bairro destino){
+    public int[][] carregarMatrizAdjacente(){
+        int totalBairros = bairroService.totalDeBairros();
 
-        int idOrigem = origem.getId();
-        int idDestino = destino.getId();
+        int[][] matriz = new int[totalBairros][totalBairros];
 
+        int INFINITO = Integer.MAX_VALUE;
 
+        //é uma matriz de adjacencia, lembrar aula luiz mario
+        for (int i = 0; i < totalBairros; i++) {
+            for (int j = 0; j < totalBairros; j++) {
+                if (i == j) {
+                    matriz[i][j] = 0; //a diagonal principal é sempre 0, pois sua distancia para você mesmo é sempre 0
+                } else {
+                    matriz[i][j] = INFINITO; //qualquer coisa fora da diagonal principal está recebendo o valor máximo possível dentro de um inteiro
+                }
+            }
+        }
+
+        // Preenche com as conexões do banco
+        List<RuasConexoes> conexoes = ruasConexoesRepository.findAll();
+
+        for (RuasConexoes rc : conexoes) {
+            int origem = rc.getBairroOrigem().getId() - 1;  // IDs de 1 em diante
+            int destino = rc.getBairroDestino().getId() - 1;
+            int distancia = rc.getDistancia();
+
+            matriz[origem][destino] = distancia;
+        }
+
+        System.out.println("MATRIZ DE ADJACENCIA");
+        System.out.println("========================================================================================");
+        imprimirMatriz(matriz);
+        System.out.println("========================================================================================");
+        return matriz;
 
     }
+
+    public static void imprimirMatriz(int[][] matriz) {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                System.out.print(matriz[i][j] + "\t"); // \t para alinhar colunas
+            }
+            System.out.println(); // Pula para a próxima linha
+        }
+    }
+    //AQUI COMEÇARA A APLICAÇÃO DE DJISKTRA PARA ACHAR O CAMINHO MENOR ENTRE DOIS PONTOS
 }

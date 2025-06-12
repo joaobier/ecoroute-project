@@ -36,4 +36,6 @@ public class BairroService {
 
     public void deletar(int id) {bairroRepository.deleteById(id);}
 
+    public int totalDeBairros(){return bairroRepository.contarTotalDeBairros();}
+
 }
