@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BairroService {
@@ -37,5 +38,15 @@ public class BairroService {
     public void deletar(int id) {bairroRepository.deleteById(id);}
 
     public int totalDeBairros(){return bairroRepository.contarTotalDeBairros();}
+
+    //Apenas para usar no grafo
+    public List<Integer> obterTodosIdsOrdenados() {
+        return bairroRepository.findAll()
+                .stream()
+                .map(Bairro::getId)
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
 
 }

@@ -7,7 +7,9 @@ import com.ecoroute.ecoroute.Repositories.RuasConexoesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -156,30 +158,46 @@ public class RuasConexoesService {
     public int[][] carregarMatrizAdjacente(){
         int totalBairros = bairroService.totalDeBairros();
 
-        int[][] matriz = new int[totalBairros][totalBairros];
+        // Matriz com +1 coluna (coluna 0 guarda o ID do bairro)
+        int[][] matriz = new int[totalBairros][totalBairros + 1];
 
         int INFINITO = Integer.MAX_VALUE;
 
-        //é uma matriz de adjacencia, lembrar aula luiz mario
+        // IDs reais dos bairros em ordem
+        List<Integer> idsBairros = bairroService.obterTodosIdsOrdenados(); // você precisa garantir isso
+        Map<Integer, Integer> idParaIndice = new HashMap<>();
+
+        // Mapeia o ID real para o índice da matriz
         for (int i = 0; i < totalBairros; i++) {
-            for (int j = 0; j < totalBairros; j++) {
-                if (i == j) {
-                    matriz[i][j] = 0; //a diagonal principal é sempre 0, pois sua distancia para você mesmo é sempre 0
+            int idReal = idsBairros.get(i);
+            matriz[i][0] = idReal; // coluna 0 armazena o ID real
+            idParaIndice.put(idReal, i);
+        }
+
+        // Inicializa a matriz com 0 na diagonal e INFINITO nas demais posições
+        for (int i = 0; i < totalBairros; i++) {
+            for (int j = 1; j <= totalBairros; j++) {
+                if ((j - 1) == i) {
+                    matriz[i][j] = 0; // distância de um bairro para ele mesmo
                 } else {
-                    matriz[i][j] = INFINITO; //qualquer coisa fora da diagonal principal está recebendo o valor máximo possível dentro de um inteiro
+                    matriz[i][j] = INFINITO;
                 }
             }
         }
 
         // Preenche com as conexões do banco
         List<RuasConexoes> conexoes = ruasConexoesRepository.findAll();
-
         for (RuasConexoes rc : conexoes) {
-            int origem = rc.getBairroOrigem().getId() - 1;  // IDs de 1 em diante
-            int destino = rc.getBairroDestino().getId() - 1;
+            int idOrigem = rc.getBairroOrigem().getId();
+            int idDestino = rc.getBairroDestino().getId();
             int distancia = rc.getDistancia();
 
-            matriz[origem][destino] = distancia;
+            Integer i = idParaIndice.get(idOrigem);
+            Integer j = idParaIndice.get(idDestino);
+
+            if (i != null && j != null) {
+                matriz[i][j + 1] = distancia; // +1 pois col 0 guarda o ID
+            }
         }
 
         System.out.println("MATRIZ DE ADJACENCIA");
