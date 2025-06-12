@@ -275,41 +275,55 @@ public class RuasConexoesService {
 
             visitado[u] = true;
 
-            // Atualizar as distâncias dos vizinhos de u
+            //PASSA ATUALIZANDO A DISTÂNCIA DOS VISINHOS AGORA QUE SABE
             for (int v = 1; v < matriz[u].length; v++) {
                 int distanciaParaVizinho = matriz[u][v];
-                int idVizinho = v; // como a coluna 1 representa o bairro de ID 1, etc.
+                int idVizinho = v; //ID da coluna do vizinho
 
-                // Encontrar o índice da linha que tem o bairro de ID v
+                //Encontrar o índice da linha que tem o bairro de ID v
                 int indiceVizinho = -1;
                 for (int i = 0; i < n; i++) {
                     if (matriz[i][0] == idVizinho) {
-                        indiceVizinho = i;
-                        break;
+                        indiceVizinho = i; //ACHOU, SALVA O INDICE DO VIZINHO MAIS PRÓXIMO
+                        break; //PARA DE PROCURAR PQ JÁ ACHOU
                     }
                 }
 
+                /*
+                AQUI É IMPORTANTE
+                SE
+                - Encontrou o vizinho ou seja, é diferente de -1 que é o estado que estava antes de procurar
+                = O vizinho ainda não foi visitado
+                - Existe uma conexão (se a distância for menor que o INFINITO
+                - Caminho entre eles for menor
+                 */
                 if (indiceVizinho != -1 &&
                         !visitado[indiceVizinho] &&
                         distanciaParaVizinho != INFINITO &&
                         distancias[u] + distanciaParaVizinho < distancias[indiceVizinho]) {
 
+                    // Atualiza a menor distância conhecida até o vizinho
                     distancias[indiceVizinho] = distancias[u] + distanciaParaVizinho;
+
+                    // Registra que o melhor caminho até esse vizinho veio de 'u'
                     anteriores[indiceVizinho] = u;
                 }
             }
         }
 
-        // Reconstruir o caminho
+        //RECONSTRUINDO O CAMINHO PARA MANDAR A STRING COM AS INFOS
         List<Integer> caminho = new ArrayList<>();
-        int atual = indiceDestino;
+        int atual = indiceDestino; //COMEÇO DO CAMINHO
+
+        //ENQUANTO NÃO CHEGAR AO INICIO DO CAMINHO
         while (atual != -1) {
             caminho.add(0, matriz[atual][0]); // Adiciona o ID do bairro no início da lista
-            atual = anteriores[atual];
+            atual = anteriores[atual]; // Avança para o bairro anterior no caminho
         }
 
         if (distancias[indiceDestino] == INFINITO) {
-            return "Não há caminho entre os bairros selecionados.";
+            return "Não há caminho entre os bairros selecionados."; // Se não foi possível alcançar o destino, retorna mensagem
+            //APENAS SE O DESTINO OU A ORIGEM FORAM IMPOSSÍVEIS DE CHEGAR
         }
 
         // Construir string de saída
