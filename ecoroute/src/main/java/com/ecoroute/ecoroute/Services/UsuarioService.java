@@ -3,6 +3,7 @@ package com.ecoroute.ecoroute.Services;
 import com.ecoroute.ecoroute.Model.Usuario;
 import com.ecoroute.ecoroute.Repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
@@ -23,6 +27,8 @@ public class UsuarioService {
     }
 
     public Usuario salvar(Usuario usuario) {
+        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCriptografada);
         return usuarioRepository.save(usuario);
     }
 
