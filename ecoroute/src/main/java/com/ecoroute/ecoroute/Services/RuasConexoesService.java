@@ -15,7 +15,7 @@ public class RuasConexoesService {
     private final RuasConexoesRepository ruasConexoesRepository;
     private final BairroService bairroService;
     private int[][] grafo;
-    private int[][] matrizAdjacencia;
+    private int[][] matrizAdjacencia = null;
 
     @Autowired
     public RuasConexoesService(RuasConexoesRepository ruasConexoesRepository, BairroService bairroService) {
@@ -152,7 +152,7 @@ public class RuasConexoesService {
         });
     }
 
-    public int[][] carregarMatrizAdjacente(){
+    public void carregarMatrizAdjacente(){
         int totalBairros = bairroService.totalDeBairros();
 
         // Matriz com +1 coluna (coluna 0 guarda o ID do bairro)
@@ -201,7 +201,7 @@ public class RuasConexoesService {
         System.out.println("========================================================================================");
         imprimirMatriz(matriz);
         System.out.println("========================================================================================");
-        return matriz;
+        this.matrizAdjacencia = matriz;
 
     }
 
@@ -214,10 +214,19 @@ public class RuasConexoesService {
         }
     }
 
-    //AQUI COMEÇARA A APLICAÇÃO DE DJISKTRA PARA ACHAR O CAMINHO MENOR ENTRE DOIS PONTOS
-    public String djkstra(int[][] matriz, int origemId, int destinoId){
+    //chama o djkstra por aqui!
+    public String melhorCaminho(int origemId, int destinoId){
+        String resposta = djkstra(origemId,destinoId);
+        return resposta;
+    }
 
-        int n = matriz.length;
+    //AQUI COMEÇARA A APLICAÇÃO DE DJISKTRA PARA ACHAR O CAMINHO MENOR ENTRE DOIS PONTOS
+    private String djkstra(int origemId, int destinoId){
+
+        carregarMatrizAdjacente();
+        int[][] matriz = this.matrizAdjacencia;
+
+        int n = this.matrizAdjacencia.length;
         int INFINITO = Integer.MAX_VALUE;
 
         int[] distancias = new int[n];

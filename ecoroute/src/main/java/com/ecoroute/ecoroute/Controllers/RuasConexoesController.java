@@ -44,5 +44,9 @@ public class RuasConexoesController {
         return ruasConexoesService.grafo();
     }
 
+    @GetMapping("/{idOrigem}/{idDestino}")
+    public String acharMelhorCaminho(@PathVariable int idOrigem, @PathVariable int idDestino){
+        return ruasConexoesService.melhorCaminho(idOrigem, idDestino);
+    }
 
 }
