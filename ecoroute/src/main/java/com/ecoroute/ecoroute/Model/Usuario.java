@@ -37,4 +37,12 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     private List<Auditoria> auditorias = new ArrayList<>();
 
+    //CONSTRUTOR PARA O FRONT USAR
+    public Usuario(String nome, String senha, String telefone, String email) {
+        this.nome = nome;
+        this.senha = senha;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
 }

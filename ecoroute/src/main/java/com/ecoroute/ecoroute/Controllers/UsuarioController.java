@@ -35,12 +35,12 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario criarUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<Void> criarUsuario(@RequestBody Usuario usuario){
         return usuarioService.salvar(usuario);
     }
 
     @PutMapping
-    public Usuario editarUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<Void> editarUsuario(@RequestBody Usuario usuario){
         return usuarioService.salvar(usuario);
     }
 

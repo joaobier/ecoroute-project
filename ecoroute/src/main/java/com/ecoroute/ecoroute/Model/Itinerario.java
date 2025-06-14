@@ -37,4 +37,12 @@ public class Itinerario {
     @Column(nullable = false)
     private String tiposResiduo;
 
+    public Itinerario(Usuario responsavel, Caminhao caminhao, Rota rota, String dataExecucao, String tiposResiduo){
+        this.responsavel = responsavel;
+        this.caminhao = caminhao;
+        this.rota = rota;
+        this.dataExecucao = dataExecucao;
+        this.tiposResiduo = tiposResiduo;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.ecoroute.ecoroute.Controllers;
 
 import com.ecoroute.ecoroute.Model.Rota;
 import com.ecoroute.ecoroute.Services.RotaService;
+import com.ecoroute.ecoroute.Services.RuasConexoesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class RotaController {
 
     private final RotaService rotaService;
+    private final RuasConexoesService ruasConexoesService;
 
     @Autowired
-    public RotaController(RotaService rotaService){
+    public RotaController(RotaService rotaService, RuasConexoesService ruasConexoesService){
         this.rotaService = rotaService;
+        this.ruasConexoesService = ruasConexoesService;
     }
 
     @GetMapping
@@ -32,6 +35,16 @@ public class RotaController {
         return rota
                 .map(ResponseEntity::ok) //tudo certo entrega o dado
                 .orElseGet(() -> ResponseEntity.notFound().build()); //não achou nada
+    }
+
+    @GetMapping("/melhor/{idOrigem}/{idDestino}")
+    public Rota acharMelhorRota(@PathVariable int idOrigem, @PathVariable int idDestino){
+        return ruasConexoesService.melhorRota(idOrigem,idDestino);
+    }
+
+    @PostMapping("/melhor/{idOrigem}/{idDestino}")
+    public Rota salvarMelhorRota(@PathVariable int idOrigem, @PathVariable int idDestino){
+        return rotaService.salvar(ruasConexoesService.melhorRota(idOrigem,idDestino));
     }
 
     @PostMapping

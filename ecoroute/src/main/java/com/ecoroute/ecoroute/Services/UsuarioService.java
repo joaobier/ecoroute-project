@@ -3,6 +3,7 @@ package com.ecoroute.ecoroute.Services;
 import com.ecoroute.ecoroute.Model.Usuario;
 import com.ecoroute.ecoroute.Repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,18 +27,19 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario salvar(Usuario usuario) {
+    public ResponseEntity<Void> salvar(Usuario usuario) {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
-        return usuarioRepository.save(usuario);
+        return ResponseEntity.ok().build();
     }
 
     public Optional<Usuario> buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 
-    public void deletar(int id) {
+    public ResponseEntity<Void> deletar(int id) {
         usuarioRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
 }
