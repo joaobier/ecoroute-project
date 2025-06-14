@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Controllers;
 
+import com.ecoroute.ecoroute.Model.Rota;
 import com.ecoroute.ecoroute.Model.RuasConexoes;
 import com.ecoroute.ecoroute.Services.BairroService;
 import com.ecoroute.ecoroute.Services.RuasConexoesService;
@@ -47,6 +48,11 @@ public class RuasConexoesController {
     @GetMapping("/{idOrigem}/{idDestino}")
     public String acharMelhorCaminho(@PathVariable int idOrigem, @PathVariable int idDestino){
         return ruasConexoesService.melhorCaminho(idOrigem, idDestino);
+    }
+
+    @GetMapping("/rota/{idOrigem}/{idDestino}")
+    public Rota acharMelhorRota(@PathVariable int idOrigem, @PathVariable int idDestino){
+        return ruasConexoesService.melhorRota(idOrigem,idDestino);
     }
 
 }

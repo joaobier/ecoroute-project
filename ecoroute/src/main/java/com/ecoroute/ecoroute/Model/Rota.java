@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "rotas")
 @Data
@@ -19,24 +21,11 @@ public class Rota {
     @EqualsAndHashCode.Include
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "bairro_id", nullable = false)
-    private Bairro bairro;
+    @ManyToMany
+    @OrderColumn(name = "ordem")
+    private List<Bairro> bairrosVisitados;
 
     @Column(nullable = false)
-    private String nome;
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario responsavel;
-
-    @Column(nullable = false)
-    private String endereco;
-
-    @Column(nullable = false)
-    private String horarioFuncionamento;
-
-    @Column(nullable = false)
-    private String tiposResiduo;
+    private Double distancia;
 
 }

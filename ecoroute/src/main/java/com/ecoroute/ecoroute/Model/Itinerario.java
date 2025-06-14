@@ -20,10 +20,21 @@ public class Itinerario {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "rota_id", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario responsavel;
+
+    @ManyToOne
+    @JoinColumn(name = "caminhao_id",nullable = false)
+    private Caminhao caminhao;
+
+    @OneToOne
+    @JoinColumn(name = "rota_id", referencedColumnName = "id")
     private Rota rota;
 
     @Column(nullable = false)
     private String dataExecucao;
+
+    @Column(nullable = false)
+    private String tiposResiduo;
 
 }
