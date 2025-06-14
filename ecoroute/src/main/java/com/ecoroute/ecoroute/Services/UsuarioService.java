@@ -30,7 +30,11 @@ public class UsuarioService {
     public ResponseEntity<Void> salvar(Usuario usuario) {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
+        usuarioRepository.save(usuario);
         return ResponseEntity.ok().build();
+    }
+    public Optional<Usuario> buscarPorId(int id) {
+        return usuarioRepository.findById(id);
     }
 
     public Optional<Usuario> buscarPorEmail(String email) {

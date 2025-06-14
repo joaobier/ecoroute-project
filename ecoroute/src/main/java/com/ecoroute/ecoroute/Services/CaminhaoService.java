@@ -26,6 +26,10 @@ public class CaminhaoService {
         return caminhaoRepository.save(caminhao);
     }
 
+    public Optional<Caminhao> buscarPorId(int id){
+        return caminhaoRepository.findById(id);
+    }
+
     public Optional<Caminhao> buscarPorPlaca(String placa){
         return caminhaoRepository.findByPlaca(placa);
     }
