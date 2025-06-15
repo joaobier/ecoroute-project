@@ -36,5 +36,11 @@ public class Auditoria {
     @Column(nullable = false)
     private String descricaoOcorrencia;
 
-
+    public Auditoria(String dataOcorrencia, Usuario usuario, String tabela, String operacao, String descricaoOcorrencia) {
+        this.dataOcorrencia = dataOcorrencia;
+        this.usuario = usuario;
+        this.tabela = tabela;
+        this.operacao = operacao;
+        this.descricaoOcorrencia = descricaoOcorrencia;
+    }
 }

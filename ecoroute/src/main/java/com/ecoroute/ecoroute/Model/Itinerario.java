@@ -27,22 +27,22 @@ public class Itinerario {
     @JoinColumn(name = "caminhao_id",nullable = false)
     private Caminhao caminhao;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //deleta a rota junto com o itinerario
     @JoinColumn(name = "rota_id", referencedColumnName = "id")
     private Rota rota;
 
     @Column(nullable = false)
     private String dataExecucao;
 
-    @Column(nullable = false)
-    private String tiposResiduo;
+    @ManyToOne
+    @JoinColumn(name = "residuo_id", nullable = false)
+    private Residuo residuo;
 
-    public Itinerario(Usuario responsavel, Caminhao caminhao, Rota rota, String dataExecucao, String tiposResiduo){
+    public Itinerario(Usuario responsavel, Caminhao caminhao, Rota rota, String dataExecucao, Residuo residuo) {
         this.responsavel = responsavel;
         this.caminhao = caminhao;
         this.rota = rota;
         this.dataExecucao = dataExecucao;
-        this.tiposResiduo = tiposResiduo;
+        this.residuo = residuo;
     }
-
 }

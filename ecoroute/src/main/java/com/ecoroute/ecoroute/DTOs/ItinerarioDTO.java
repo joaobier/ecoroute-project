@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ItinerarioDTO {
 
-    private int responsavelId; // ID do Usuario responsável
-    private int caminhaoId;    // ID do Caminhao
-    private int rotaId;        // ID da Rota
+    private int responsavelId;
+    private int caminhaoId;
+    private int origemId;
+    private int destinoId;
     private String dataExecucao;
-    private String tiposResiduo;
+    private int residuoId;
 }

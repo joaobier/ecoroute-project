@@ -1,17 +1,12 @@
 package com.ecoroute.ecoroute.Controllers;
 
 import com.ecoroute.ecoroute.DTOs.ItinerarioDTO;
-import com.ecoroute.ecoroute.Model.Caminhao;
-import com.ecoroute.ecoroute.Model.Itinerario;
-import com.ecoroute.ecoroute.Model.Rota;
-import com.ecoroute.ecoroute.Model.Usuario;
-import com.ecoroute.ecoroute.Services.CaminhaoService;
-import com.ecoroute.ecoroute.Services.ItinerarioService;
-import com.ecoroute.ecoroute.Services.RotaService;
-import com.ecoroute.ecoroute.Services.UsuarioService;
+import com.ecoroute.ecoroute.Model.*;
+import com.ecoroute.ecoroute.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,12 +20,17 @@ public class ItinerarioController {
     private final UsuarioService usuarioService;
     private final CaminhaoService caminhaoService;
     private final RotaService rotaService;
+    private final RuasConexoesService ruasConexoesService;
+    private final ResiduoService residuoService;
+
     @Autowired
-    public ItinerarioController(ItinerarioService ItinerarioService, UsuarioService usuarioService, CaminhaoService caminhaoService, RotaService rotaService){
+    public ItinerarioController(ItinerarioService ItinerarioService, UsuarioService usuarioService, CaminhaoService caminhaoService, RotaService rotaService, RuasConexoesService ruasConexoesService, ResiduoService residuoService){
         this.itinerarioService = ItinerarioService;
         this.usuarioService = usuarioService;
         this.caminhaoService = caminhaoService;
         this.rotaService = rotaService;
+        this.ruasConexoesService = ruasConexoesService;
+        this.residuoService = residuoService;
     }
 
     @GetMapping
@@ -47,23 +47,26 @@ public class ItinerarioController {
                 .orElseGet(() -> ResponseEntity.notFound().build()); //não achou nada
     }
 
-    @PostMapping
+    @Transactional //pq não post? pq tem várias requisições ao banco e capturas de dados para isso ser feito, com transactional ele só faz o commit de tudo se tudo der certo
     public Itinerario criarItinerario(@RequestBody ItinerarioDTO itinerarioDTO){
 
         Usuario usuario = usuarioService.buscarPorId(itinerarioDTO.getResponsavelId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario de ID:"+itinerarioDTO.getResponsavelId()+ " não encontrado"));
 
-        Caminhao caminhao = caminhaoService.buscarPorId(itinerarioDTO.getResponsavelId())
-                .orElseThrow(() -> new ResourceNotFoundException("Caminhão não encontrado"));
+        Caminhao caminhao = caminhaoService.buscarPorId(itinerarioDTO.getCaminhaoId())
+                .orElseThrow(() -> new ResourceNotFoundException("Caminhão de ID:" + itinerarioDTO.getCaminhaoId() + " não encontrado"));
 
-        Rota rota = rotaService.buscarPorId(itinerarioDTO.getResponsavelId())
-                .orElseThrow(() -> new ResourceNotFoundException("Rota não encontrada"));
+        Rota rota = ruasConexoesService.melhorRota(itinerarioDTO.getOrigemId(), itinerarioDTO.getDestinoId());
+
+        Residuo residuo = residuoService.buscarPorId(itinerarioDTO.getResiduoId())
+                .orElseThrow(() -> new ResourceNotFoundException("Residuo de ID:"+itinerarioDTO.getResiduoId()+ " não encontrado"));
 
         String dataExecucao = itinerarioDTO.getDataExecucao();
 
-        String tipoDeResiduo = itinerarioDTO.getTiposResiduo();
+        Itinerario itinerario = new Itinerario(usuario,caminhao,rota,dataExecucao,residuo);
 
-        Itinerario itinerario = new Itinerario(usuario,caminhao,rota,dataExecucao,tipoDeResiduo);
+        // Liga a rota de volta ao itinerario para salvar tudo junto, o JPA faz
+        rota.setItinerario(itinerario);
 
         return itinerarioService.salvar(itinerario);
     }

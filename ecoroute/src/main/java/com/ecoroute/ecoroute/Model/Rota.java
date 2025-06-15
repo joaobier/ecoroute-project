@@ -28,4 +28,11 @@ public class Rota {
     @Column(nullable = false)
     private Double distancia;
 
+    @OneToOne(mappedBy = "rota")
+    private Itinerario itinerario;
+
+    public Rota(List<Bairro> bairrosVisitados, Double distancia) {
+        this.bairrosVisitados = bairrosVisitados;
+        this.distancia = distancia;
+    }
 }

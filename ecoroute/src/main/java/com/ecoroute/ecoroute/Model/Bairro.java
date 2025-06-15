@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,4 +27,15 @@ public class Bairro {
     @Column(nullable = false)
     private String nome;
 
+    @OneToMany(mappedBy = "bairro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PontosDeColeta> pontosDeColeta = new ArrayList<>();
+
+    public Bairro(String nome) {
+        this.nome = nome;
+    }
+
+    public Bairro(String nome, List<PontosDeColeta> pontosDeColeta) {
+        this.nome = nome;
+        this.pontosDeColeta = pontosDeColeta;
+    }
 }

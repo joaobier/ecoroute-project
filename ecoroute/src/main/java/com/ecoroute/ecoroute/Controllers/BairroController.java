@@ -43,6 +43,11 @@ public class BairroController {
                 .orElseGet(()-> ResponseEntity.notFound().build()); //não achou nada
     }
 
+    @GetMapping("/{bairroId}/tipos-residuos")
+    public List<String> listarTiposDeResiduos(@PathVariable int bairroId) {
+        return bairroService.listarTiposDeResiduosDoBairro(bairroId);
+    }
+
     @PostMapping
     public Bairro criarBairro(@RequestBody Bairro bairro){
         return bairroService.salvar(bairro);

@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "pontos_coleta")
 @Data
@@ -36,7 +39,28 @@ public class PontosDeColeta {
     @Column(nullable = false)
     private String horarioFuncionamento;
 
-    //ISSO PRECISA SER REFORMULADO, CONVERSAR COM O GUSTAVO
-    @Column(nullable = false)
-    private String residuosAceitaveis;
+    @ManyToMany
+    @JoinTable(
+            name = "ponto_residuos",
+            joinColumns = @JoinColumn(name = "ponto_id"),
+            inverseJoinColumns = @JoinColumn(name = "residuo_id")
+    )
+    private List<Residuo> residuosAceitos = new ArrayList<>();
+
+    public PontosDeColeta(Bairro bairro, String nome, Usuario usuario, String endereco, String residuosAceitaveis, String horarioFuncionamento, ArrayList<Residuo> residuos) {
+        this.bairro = bairro;
+        this.nome = nome;
+        this.usuario = usuario;
+        this.endereco = endereco;
+        this.horarioFuncionamento = horarioFuncionamento;
+        this.residuosAceitos = residuos;
+    }
+
+    public PontosDeColeta(Bairro bairro, String nome, Usuario usuario, String endereco, String horarioFuncionamento) {
+        this.bairro = bairro;
+        this.nome = nome;
+        this.usuario = usuario;
+        this.endereco = endereco;
+        this.horarioFuncionamento = horarioFuncionamento;
+    }
 }

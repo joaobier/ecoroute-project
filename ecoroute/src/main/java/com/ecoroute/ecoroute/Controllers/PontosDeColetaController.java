@@ -1,6 +1,7 @@
 package com.ecoroute.ecoroute.Controllers;
 
 import com.ecoroute.ecoroute.Model.PontosDeColeta;
+import com.ecoroute.ecoroute.Model.Residuo;
 import com.ecoroute.ecoroute.Services.PontosDeColetaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,13 @@ public class PontosDeColetaController {
     @PostMapping
     public PontosDeColeta criarPontosDeColeta(@RequestBody PontosDeColeta pontosDeColeta){
         return pontosDeColetaService.salvar(pontosDeColeta);
+    }
+
+    //ADICIONA UM ÚNICO RESIDUO AO PONTO DE COLETA
+    @PostMapping("/{pontoId}/residuos")
+    public ResponseEntity<PontosDeColeta> adicionarResiduoAoPonto(@PathVariable int pontoId, @RequestBody Residuo residuo) {
+        PontosDeColeta pontoAtualizado = pontosDeColetaService.adicionarResiduoAoPonto(pontoId, residuo.getId());
+        return ResponseEntity.ok(pontoAtualizado);
     }
 
     @PutMapping
