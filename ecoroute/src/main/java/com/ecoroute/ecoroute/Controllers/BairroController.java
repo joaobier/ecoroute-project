@@ -49,8 +49,9 @@ public class BairroController {
         return bairroService.listarTiposDeResiduosDoBairro(bairroId);
     }
 
-    @PostMapping("/{id}")
-    public Bairro criarBairro(@PathVariable int id, @RequestBody Bairro bairro){
+    @PostMapping
+    public Bairro criarBairro(@RequestBody Bairro bairro){
+        //bairro.setId(0);
         return bairroService.salvar(bairro);
     }
 

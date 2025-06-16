@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Controllers;
 
+import com.ecoroute.ecoroute.Model.Residuo;
 import com.ecoroute.ecoroute.Model.Rota;
 import com.ecoroute.ecoroute.Model.RuasConexoes;
 import com.ecoroute.ecoroute.Services.BairroService;
@@ -40,6 +41,11 @@ public class RuasConexoesController {
         ruasConexoesService.salvar(ruasConexoes);
     }
 
+    @PostMapping("/{idOrigem}/{idDestino}/{distancia}")
+    public ResponseEntity<String> criarRuaConexaoBairros(@PathVariable int idOrigem, @PathVariable int idDestino, @PathVariable int distancia){
+        return ruasConexoesService.salvarComBairros(idOrigem,idDestino,distancia);
+    }
+
     @GetMapping("/grafo")
     public int[][] grafo(){
         return ruasConexoesService.grafo();
@@ -53,6 +59,18 @@ public class RuasConexoesController {
     @GetMapping("/rota/{idOrigem}/{idDestino}")
     public Rota acharMelhorRota(@PathVariable int idOrigem, @PathVariable int idDestino){
         return ruasConexoesService.melhorRota(idOrigem,idDestino);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable int id) {
+        Optional<RuasConexoes> existe = ruasConexoesService.buscarPorId(id);
+        if (existe.isPresent()) {
+            if(ruasConexoesService.deletar(id)){
+                return ResponseEntity.noContent().build();
+            } else return ResponseEntity.notFound().build();   // 404 Not Found
+        } else {
+            return ResponseEntity.notFound().build();   // 404 Not Found
+        }
     }
 
 }

@@ -6,6 +6,8 @@ import com.ecoroute.ecoroute.Model.RuasConexoes;
 import com.ecoroute.ecoroute.Repositories.BairroRepository;
 import com.ecoroute.ecoroute.Repositories.RuasConexoesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -63,6 +65,42 @@ public class RuasConexoesService {
         return ruasConexoesRepository.findById(id);
     }
 
+    public ResponseEntity<String> salvarComBairros(int origemId, int destinoId, int distancia) {
+
+        Bairro origem = bairroRepository.findById(origemId).orElseThrow(() -> new RuntimeException("Bairro não encontrado"));
+
+        Bairro destino = bairroRepository.findById(destinoId).orElseThrow(() -> new RuntimeException("Bairro não encontrado"));
+
+        //Está olhando se a ida e volta já existem
+        boolean Existe = ruasConexoesRepository.existsByBairroOrigemIdAndBairroDestinoId(
+                origem.getId(),
+                destino.getId()
+        );
+
+        //Se não existir ele registra os 2
+        if (!Existe) {
+            //cria a conexão de ida
+            RuasConexoes ruaIda = new RuasConexoes(
+              origem,
+              destino,
+              distancia
+            );
+            //Cria a conexão de volta
+            RuasConexoes ruaVolta = new RuasConexoes(
+                    destino,
+                    origem,
+                    distancia
+            );
+            ruasConexoesRepository.save(ruaIda);//SALVA A IDA
+            ruasConexoesRepository.save(ruaVolta);//SALVA A VOLTA
+            atualizarGrafo(); //atualiza o grafo atual
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conexão já existente entre os bairros.");
+            //throw new RuntimeException("Conexão já existente entre os bairros.");
+        }
+    }
+
     public void salvar(RuasConexoes ruasConexoes) {
         //Está olhando se a ida e volta já existem
         boolean Existe = ruasConexoesRepository.existsByBairroOrigemIdAndBairroDestinoId(
@@ -86,7 +124,7 @@ public class RuasConexoesService {
         }
     }
 
-    public void deletar(int id) {
+    public boolean deletar(int id) {
         /*
            POR QUE ESSE MÉTODO É COMPLEXO E ASSIM?
            porque o que está acontecendo aqui é o seguinte
@@ -125,8 +163,9 @@ public class RuasConexoesService {
                     rc.getBairroDestino().getId(),
                     rc.getBairroOrigem().getId()
             );
+            return true;
         } else {
-            throw new RuntimeException("Conexão com ID " + id + " não encontrada.");
+            return false;
         }
     }
 

@@ -1,6 +1,9 @@
 package com.ecoroute.ecoroute.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +18,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Residuo {
 
     @Id
@@ -25,7 +31,6 @@ public class Residuo {
     private String tipo;
 
     @ManyToMany(mappedBy = "residuosAceitos")
-    @JsonIgnore
     private List<PontosDeColeta> pontosDeColeta = new ArrayList<>();
 
     public Residuo(String tipo) {

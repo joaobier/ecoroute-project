@@ -49,7 +49,7 @@ public class ItinerarioController {
 
     //@Transactional //pq não post? pq tem várias requisições ao banco e capturas de dados para isso ser feito, com transactional ele só faz o commit de tudo se tudo der certo
     @PostMapping
-    public Itinerario criarItinerario(@RequestBody ItinerarioDTO itinerarioDTO){
+    public void criarItinerario(@RequestBody ItinerarioDTO itinerarioDTO){
 
         Usuario usuario = usuarioService.buscarPorId(itinerarioDTO.getResponsavelId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario de ID:"+itinerarioDTO.getResponsavelId()+ " não encontrado"));
@@ -69,7 +69,7 @@ public class ItinerarioController {
         // Liga a rota de volta ao itinerario para salvar tudo junto, o JPA faz
         rota.setItinerario(itinerario);
 
-        return itinerarioService.salvar(itinerario);
+         itinerarioService.salvar(itinerario);
     }
 
     @PutMapping("/{id}")

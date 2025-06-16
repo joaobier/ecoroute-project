@@ -1,6 +1,8 @@
 package com.ecoroute.ecoroute.Model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class PontosDeColeta {
 
     @Id
@@ -24,7 +27,7 @@ public class PontosDeColeta {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "bairro_id", nullable = false)
+    @JoinColumn(name = "bairro_id", nullable = true)
     private Bairro bairro;
 
     @Column(nullable = false)
@@ -46,7 +49,6 @@ public class PontosDeColeta {
             joinColumns = @JoinColumn(name = "ponto_id"),
             inverseJoinColumns = @JoinColumn(name = "residuo_id")
     )
-    @JsonManagedReference
     private List<Residuo> residuosAceitos = new ArrayList<>();
 
     public PontosDeColeta(Bairro bairro, String nome, Usuario usuario, String endereco, String residuosAceitaveis, String horarioFuncionamento, ArrayList<Residuo> residuos) {

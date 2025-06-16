@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class Usuario {
     private String email;
 
     @OneToMany(mappedBy = "usuario")
+    @JsonIgnore
     private List<Auditoria> auditorias = new ArrayList<>();
 
     //CONSTRUTOR PARA O FRONT USAR
