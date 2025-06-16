@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Controllers;
 
+import com.ecoroute.ecoroute.Model.Auditoria;
 import com.ecoroute.ecoroute.Model.PontosDeColeta;
 import com.ecoroute.ecoroute.Model.Residuo;
 import com.ecoroute.ecoroute.Services.PontosDeColetaService;
@@ -47,14 +48,27 @@ public class PontosDeColetaController {
         return ResponseEntity.ok(pontoAtualizado);
     }
 
-    @PutMapping
-    public PontosDeColeta editarPontosDeColeta(@RequestBody PontosDeColeta pontosDeColeta){
-        return pontosDeColetaService.editar(pontosDeColeta);
+    @PutMapping("/{id}")
+    public ResponseEntity<PontosDeColeta> editarPontosDeColeta(@PathVariable int id, @RequestBody PontosDeColeta pontosDeColeta){
+        Optional<PontosDeColeta> existe = pontosDeColetaService.buscarPorId(id);
+        if(existe.isPresent()){
+            pontosDeColeta.setId(id); //ATRIBUI O ID AQUI
+            PontosDeColeta atualizado = pontosDeColetaService.editar(pontosDeColeta);
+            return ResponseEntity.ok(atualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deletarPontosDeColeta(@PathVariable int id){
-        pontosDeColetaService.deletar(id);
+    public ResponseEntity<Void> deletarPontosDeColeta(@PathVariable int id){
+        Optional<PontosDeColeta> existe = pontosDeColetaService.buscarPorId(id);
+        if (existe.isPresent()) {
+            pontosDeColetaService.deletar(id);
+            return ResponseEntity.noContent().build();  // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build();   // 404 Not Found
+        }
     }
 
 }

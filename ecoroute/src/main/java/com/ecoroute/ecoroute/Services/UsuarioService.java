@@ -33,6 +33,14 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
         return ResponseEntity.ok().build();
     }
+
+    public ResponseEntity<Void> editar(Usuario usuario) {
+        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCriptografada);
+        usuarioRepository.save(usuario);
+        return ResponseEntity.ok().build();
+    }
+
     public Optional<Usuario> buscarPorId(int id) {
         return usuarioRepository.findById(id);
     }

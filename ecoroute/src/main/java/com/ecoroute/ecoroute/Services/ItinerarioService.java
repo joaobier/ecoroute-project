@@ -30,6 +30,10 @@ public class ItinerarioService {
         return itinerarioRepository.save(itinerario);
     }
 
+    public Itinerario editar(Itinerario itinerario) {
+        return itinerarioRepository.save(itinerario);
+    }
+
     public void deletar(int id) {
         itinerarioRepository.deleteById(id);
     }

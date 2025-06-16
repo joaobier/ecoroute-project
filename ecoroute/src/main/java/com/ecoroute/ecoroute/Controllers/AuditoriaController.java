@@ -39,12 +39,28 @@ public class AuditoriaController {
         return auditoriaService.salvar(auditoria);
     }
 
-    @PutMapping
-    public Auditoria editarAuditoria(@RequestBody Auditoria auditoria){
-        return auditoriaService.editar(auditoria);
+    @PutMapping("/{id}")
+    public ResponseEntity<Auditoria> editarAuditoria(@PathVariable int id, @RequestBody Auditoria auditoria){
+        Optional<Auditoria> existe = auditoriaService.buscarPorId(id);
+        if(existe.isPresent()){
+            auditoria.setId(id); //ATRIBUI O ID AQUI
+            Auditoria atualizado = auditoriaService.editar(auditoria);
+            return ResponseEntity.ok(atualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deletarAuditoria(@PathVariable int id){auditoriaService.deletar(id);}
+    public ResponseEntity<Void> deletarAuditoria(@PathVariable int id){
+        Optional<Auditoria> existe = auditoriaService.buscarPorId(id);
+        if (existe.isPresent()) {
+            auditoriaService.deletar(id);
+            return ResponseEntity.noContent().build();  // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build();   // 404 Not Found
+        }
+
+    }
 
 }

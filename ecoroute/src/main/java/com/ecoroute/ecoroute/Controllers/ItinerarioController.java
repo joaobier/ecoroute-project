@@ -72,12 +72,27 @@ public class ItinerarioController {
         return itinerarioService.salvar(itinerario);
     }
 
-    @PutMapping
-    public Itinerario editarItinerario(@RequestBody Itinerario Itinerario){
-        return itinerarioService.salvar(Itinerario);
+    @PutMapping("/{id}")
+    public ResponseEntity<Itinerario> editarItinerario(@PathVariable int id, @RequestBody Itinerario itinerario){
+        Optional<Itinerario> existe = itinerarioService.buscarPorId(id);
+        if(existe.isPresent()){
+            itinerario.setId(id); //ATRIBUI O ID AQUI
+            Itinerario atualizado = itinerarioService.editar(itinerario);
+            return ResponseEntity.ok(atualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deletarItinerario(@PathVariable int id){itinerarioService.deletar(id);}
+    public ResponseEntity<Void> deletarItinerario(@PathVariable int id){
+        Optional<Itinerario> existe = itinerarioService.buscarPorId(id);
+        if (existe.isPresent()) {
+            itinerarioService.deletar(id);
+            return ResponseEntity.noContent().build();  // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build();   // 404 Not Found
+        }
+    }
 
 }

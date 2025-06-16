@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Controllers;
 
+import com.ecoroute.ecoroute.Model.Auditoria;
 import com.ecoroute.ecoroute.Model.Usuario;
 import com.ecoroute.ecoroute.Services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,27 @@ public class UsuarioController {
         return usuarioService.salvar(usuario);
     }
 
-    @PutMapping
-    public ResponseEntity<Void> editarUsuario(@RequestBody Usuario usuario){
-        return usuarioService.salvar(usuario);
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> editarUsuario(@PathVariable int id, @RequestBody Usuario usuario){
+        Optional<Usuario> existe = usuarioService.buscarPorId(id);
+        if(existe.isPresent()){
+            usuario.setId(id); //ATRIBUI O ID AQUI
+            usuarioService.editar(usuario);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deletarUsuario(@PathVariable int id){ usuarioService.deletar(id);}
+    public ResponseEntity<Void> deletarUsuario(@PathVariable int id){
+        Optional<Usuario> existe = usuarioService.buscarPorId(id);
+        if (existe.isPresent()) {
+            usuarioService.deletar(id);
+            return ResponseEntity.noContent().build();  // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build();   // 404 Not Found
+        }
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Controllers;
 
+import com.ecoroute.ecoroute.Model.Auditoria;
 import com.ecoroute.ecoroute.Model.Caminhao;
 import com.ecoroute.ecoroute.Services.CaminhaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,27 @@ public class CaminhaoController {
     @PostMapping
     public Caminhao criarCaminhao(@RequestBody Caminhao caminhao){return caminhaoService.salvar(caminhao);}
 
-    @PutMapping
-    public Caminhao editarCaminhao(@RequestBody Caminhao caminhao){return caminhaoService.salvar(caminhao);}
+    @PutMapping("/{id}")
+    public ResponseEntity<Caminhao> editarCaminhao(@PathVariable int id, @RequestBody Caminhao caminhao){
+        Optional<Caminhao> existe = caminhaoService.buscarPorId(id);
+        if(existe.isPresent()){
+            caminhao.setId(id); //ATRIBUI O ID AQUI
+            Caminhao atualizado = caminhaoService.editar(caminhao);
+            return ResponseEntity.ok(atualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @DeleteMapping("/{id}")
-    public void deletarCaminhao(@PathVariable int id){caminhaoService.deletar(id);}
+    public ResponseEntity<Void> deletarCaminhao(@PathVariable int id){
+        Optional<Caminhao> existe = caminhaoService.buscarPorId(id);
+        if (existe.isPresent()) {
+            caminhaoService.deletar(id);
+            return ResponseEntity.noContent().build();  // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build();   // 404 Not Found
+        }
+    }
 
 }

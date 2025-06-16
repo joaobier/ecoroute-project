@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Controllers;
 
+import com.ecoroute.ecoroute.Model.Auditoria;
 import com.ecoroute.ecoroute.Model.Bairro;
 import com.ecoroute.ecoroute.Services.BairroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +49,32 @@ public class BairroController {
         return bairroService.listarTiposDeResiduosDoBairro(bairroId);
     }
 
-    @PostMapping
-    public Bairro criarBairro(@RequestBody Bairro bairro){
+    @PostMapping("/{id}")
+    public Bairro criarBairro(@PathVariable int id, @RequestBody Bairro bairro){
         return bairroService.salvar(bairro);
     }
 
-    @PutMapping
-    public Bairro editarBairro(@RequestBody Bairro bairro){return bairroService.editar(bairro);}
+    @PutMapping("/{id}")
+    public ResponseEntity<Bairro> editarBairro(@PathVariable int id, @RequestBody Bairro bairro){
+        Optional<Bairro> existe = bairroService.buscarPorId(id);
+        if(existe.isPresent()){
+            bairro.setId(id);
+            Bairro atualizado = bairroService.editar(bairro);
+            return ResponseEntity.ok(atualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @DeleteMapping("/{id}")
-    public void deletarBairro(@PathVariable int id){bairroService.deletar(id);}
+    public ResponseEntity<Void> deletarBairro(@PathVariable int id){
+        Optional<Bairro> existe = bairroService.buscarPorId(id);
+        if (existe.isPresent()) {
+            bairroService.deletar(id);
+            return ResponseEntity.noContent().build();  // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build();   // 404 Not Found
+        }
+    }
 
 }
