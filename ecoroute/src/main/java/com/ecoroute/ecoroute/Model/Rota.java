@@ -1,5 +1,7 @@
 package com.ecoroute.ecoroute.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +31,7 @@ public class Rota {
     private Double distancia;
 
     @OneToOne(mappedBy = "rota")
+    @JsonIgnore
     private Itinerario itinerario;
 
     public Rota(List<Bairro> bairrosVisitados, Double distancia) {

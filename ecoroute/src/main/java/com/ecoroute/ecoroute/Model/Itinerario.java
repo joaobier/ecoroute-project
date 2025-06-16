@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class Itinerario {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //deleta a rota junto com o itinerario
     @JoinColumn(name = "rota_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Rota rota;
 
     @Column(nullable = false)

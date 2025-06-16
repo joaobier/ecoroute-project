@@ -47,7 +47,8 @@ public class ItinerarioController {
                 .orElseGet(() -> ResponseEntity.notFound().build()); //não achou nada
     }
 
-    @Transactional //pq não post? pq tem várias requisições ao banco e capturas de dados para isso ser feito, com transactional ele só faz o commit de tudo se tudo der certo
+    //@Transactional //pq não post? pq tem várias requisições ao banco e capturas de dados para isso ser feito, com transactional ele só faz o commit de tudo se tudo der certo
+    @PostMapping
     public Itinerario criarItinerario(@RequestBody ItinerarioDTO itinerarioDTO){
 
         Usuario usuario = usuarioService.buscarPorId(itinerarioDTO.getResponsavelId())
