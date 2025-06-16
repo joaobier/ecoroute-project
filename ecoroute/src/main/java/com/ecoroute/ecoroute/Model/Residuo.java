@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Residuo {
     private String tipo;
 
     @ManyToMany(mappedBy = "residuosAceitos")
+    @JsonIgnore
     private List<PontosDeColeta> pontosDeColeta = new ArrayList<>();
 
     public Residuo(String tipo) {

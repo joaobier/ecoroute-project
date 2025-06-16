@@ -3,6 +3,7 @@ package com.ecoroute.ecoroute.Controllers;
 import com.ecoroute.ecoroute.Model.Residuo;
 import com.ecoroute.ecoroute.Services.ResiduoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,14 @@ public class ResiduoController {
     @PutMapping
     public Residuo editarResiduo(@RequestBody Residuo residuo){return residuoService.editar(residuo);}
 
-    @DeleteMapping
-    public void deletarResiduo(@PathVariable int id){residuoService.deletar(id);}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable int id) {
+        boolean deletado = residuoService.deletar(id);
+        if (deletado) {
+            return ResponseEntity.noContent().build(); // 204
+        } else {
+            return ResponseEntity.notFound().build();  // 404
+        }
+    }
 
 }

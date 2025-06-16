@@ -1,5 +1,6 @@
 package com.ecoroute.ecoroute.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,6 +46,7 @@ public class PontosDeColeta {
             joinColumns = @JoinColumn(name = "ponto_id"),
             inverseJoinColumns = @JoinColumn(name = "residuo_id")
     )
+    @JsonManagedReference
     private List<Residuo> residuosAceitos = new ArrayList<>();
 
     public PontosDeColeta(Bairro bairro, String nome, Usuario usuario, String endereco, String residuosAceitaveis, String horarioFuncionamento, ArrayList<Residuo> residuos) {

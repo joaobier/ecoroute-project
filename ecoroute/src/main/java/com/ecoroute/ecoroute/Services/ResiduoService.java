@@ -3,6 +3,7 @@ package com.ecoroute.ecoroute.Services;
 import com.ecoroute.ecoroute.Model.Residuo;
 import com.ecoroute.ecoroute.Repositories.ResiduoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,13 @@ public class ResiduoService {
 
     public Residuo editar(Residuo residuo){return residuoRepository.save(residuo);}
 
-    public void deletar(int id){ residuoRepository.deleteById(id);}
+    public boolean deletar(int id) {
+        if (residuoRepository.existsById(id)) {
+            residuoRepository.deleteById(id);
+            return true;// Deletou com sucesso
+        } else {
+            return false;// Não existia
+        }
+    }
 
 }
